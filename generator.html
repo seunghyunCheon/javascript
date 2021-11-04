@@ -1,0 +1,24 @@
+<script>const log = console.log; </script>
+
+<!-- 제너레이터 : 이터레이터이자 이터러블을 생성하는 함수 -->
+
+<script>
+    // generator helps specific sentence to be handled as well as value.
+    // so it is useful to improve functions' flexibility. 
+    function *gen() {
+        log('first');
+        yield 1;
+        log('second');
+        if(false) yield 2;
+        yield 3;
+    }
+
+    let iter = gen()
+    log(iter.next())
+    log(iter.next())
+    log(iter.next())
+
+    for(const a of gen()) log(a)
+    
+    
+</script>
