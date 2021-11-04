@@ -1,0 +1,38 @@
+<!-- 일급 함수 : 함수가 값으로 다뤄진다.-->
+<!-- 고차 함수 : 함수를 값으로 다룬다. 하나 이상의 함수인자가 있다. -->
+
+
+
+<!-- 함수를 인자로 받아서 실행하는 함수 -->
+
+<!-- 
+- apply1
+- times -->
+<script>
+    const log = console.log;
+    const apply1 = f => f(2)
+    const add2 = a => a+2;
+    // 인자로 함수를 넣을때는 반드시 함수형태여야 한다. 값형태면 안됨.
+    log(apply1(a => a+2))
+
+    const times = (f,n) => {
+        let i = -1;
+        while(++i < n) {
+            log(f(i))
+        }
+    }
+    const add11 = a => a+11
+    times(add11, 3)
+
+</script>
+
+<!-- 함수를 만들어 리턴하는 함수 (클로저를 만들어 리턴하는 함수) -->
+
+<!-- - addMaker -->
+<script>
+    const addMaker = a => b => a+b
+    const add10 = addMaker(10);
+    log(addMaker(3))
+    log(add10(2))
+
+</script>
