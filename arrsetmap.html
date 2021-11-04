@@ -66,5 +66,11 @@ for(const a of map.entries()) log(a)
     log(iter3.next())
     log(iter3.next())
     
+
+    // 전개 연산자
+    console.clear();
+    const a = [1,2];
+    log([a, ...arr, ...set, ...map.keys()])
+    // 전개 연산자는 배열을 펼쳐주거나, 배열을 인수타입으로 바꿔주는 등 역할을 한다. 사실 같은말.
     
 </script>
