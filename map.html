@@ -28,9 +28,17 @@ const products = [
 
     log(map(fname, products));
     // or log(map(p => p.name), product);
+    log(document.querySelectorAll("*"));
+    //map을 통하여 다형성을 증가시킨다. queryselectorall은 map이 없지만 map이 이를 포함함으로써 적절한 추출값 뽑음.
+    log(map(el => el.nodeName ,document.querySelectorAll("*")));
 
+    function *gen() {
+        yield 1;
+        if(false) yield 2;
+        yield 3;
+    }
 
-
+    log(map(a=> a+5,gen()));
 
     
 </script>
