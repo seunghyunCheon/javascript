@@ -40,5 +40,11 @@ const products = [
 
     log(map(a=> a+5,gen()));
 
+    let m = new Map();
+    m.set('a', 10);
+    m.set('b', 20);
+    let a = new Map(map(([k,v]) => [k,v*2],m));
+    log(a)
+
     
 </script>
