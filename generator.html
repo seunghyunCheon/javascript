@@ -22,3 +22,43 @@
     
     
 </script>
+
+
+<!-- odds -->
+<script>
+
+    function *limit(l, iter){
+        for(const a of iter){
+            
+            yield a;
+            if(a==l) return;
+        }
+    }
+
+    function *infinity(i=0){
+        while(true) yield i++;
+    }
+
+    function *odds(l) {
+        for(const a of limit(l, infinity(1))){
+            if(a%2) yield a;
+        }
+    }
+    const iterss = odds(24);
+    for(const b of iterss) {
+        log(b);
+    }
+log(...odds(10), ...odds(20));
+    
+
+//구조 분해
+const [head, ...tail] = odds(9);
+log(head)
+log(tail)
+
+const[a,b,c, ...tail2] = odds(17);
+log(a)
+log(b)
+log(c)
+log(tail2)
+</script> 
