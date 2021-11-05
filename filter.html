@@ -1,0 +1,40 @@
+<script>const log =console.log;</script>
+
+<script>
+const products = [
+    { name : '반팔티', price : 15000},
+    { name : '긴팔티', price : 20000},
+    { name : '핸드폰케이스', price : 15000},
+    { name : '후드티', price : 30000},
+    { name : '바지', price : 25000}
+];
+
+</script>
+
+<script>
+
+const filter = (f, iter) => {
+    let res = []
+    for(const a of iter){
+        if(f(a)) res.push(a)
+    }
+    return res;
+}
+const under20000s = (p) => {
+    return p.price < 20000;
+}
+// filter(under20000s, products)
+log(filter(p=>p.price <20000, products));
+
+const under20000 = [];
+
+for(const a of products){
+    if(a.price <20000) under20000.push(a); 
+}
+
+log(...under20000);
+
+log(filter(a=>a%2, [1,2,3,4]));
+log(filter(a=>a*2, [13,21]));
+    
+</script>
