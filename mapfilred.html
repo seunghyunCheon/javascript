@@ -25,4 +25,32 @@ log(
     filter(n=> n>20000 ,
       map(p=>p.price, products))));
 
+  const go = (...args) => reduce((a,f)=>f(a) ,args)
+  const pipe = (f, ...fs) => (...as) => go(f(...as), ...fs);
+
+
+
+  go(
+    0,
+    a => a+1,
+    a => a+10,
+    a => a+100,
+    log
+  );
+
+  const f = pipe(
+    a => a+1,
+    a => a+10,
+    a => a+100
+  );
+  log(f(0));
+
+  go(
+    products,
+    products => filter(p=>p.price < 20000,products),
+    products => map(p=>p.price, products),
+    prices => reduce(add, prices),
+    log
+  )
+
 </script>
