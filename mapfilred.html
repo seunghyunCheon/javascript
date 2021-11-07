@@ -44,13 +44,56 @@ log(
     a => a+100
   );
   log(f(0));
+  
+
 
   go(
     products,
-    products => filter(p=>p.price < 20000,products),
-    products => map(p=>p.price, products),
-    prices => reduce(add, prices),
+    products => filter(p=>p.price < 20000)(products),
+    products => map(p=>p.price)(products),
+    prices => reduce(add)(prices),
     log
   )
+  //위와 아래가 똑같은 이유는 먼저 products가 계속해서 return됨과 curring의 특성상이 중요하다.
+  //curry는 함수를 리턴하기 때문에 아래 go함수는 f(a, ..._) 를 리턴하게 되고 여기서 a는 products, filter는 ..._가 되게 된다.
+
+  go(
+    products,
+    filter(p=>p.price < 20000),
+    map(p=>p.price),
+    reduce(add),
+    log
+  )
+
+
+
+
+
+  //curry : 함수를 받고 원하는시점에 평가. 함수를 받아서 함수 리턴.
+  //currying의 사용이유는 재사용성.
+  //클로저 함수
+  let printInfo = group => name => log(group + ',' + name);
+  let momoGroup = printInfo('dev-momo');
+  momoGroup('hangul');
+  momoGroup('asep');
+  
+  //currying
+  let greetDeeplyCurried =
+    greeting => separator => emphasis => name =>
+      log(greeting + separator + name + emphasis);
+  
+  let greetAwkwardly = greetDeeplyCurried("Hello")("...")("?");
+  greetAwkwardly("momo");
+
+  let sayHello = greetDeeplyCurried("Hello")(",");
+  sayHello("!!")("minsu");
+
+  //curry로 하게되면 인자를 하나만 받게되면 이후 인자를 받는 함수를 리턴하도록 되어있음.
+  const mult = curry((a,b) => a*b);
+  const mult3 = mult(3);
+  log(mult3(1));
+
+
+
 
 </script>
