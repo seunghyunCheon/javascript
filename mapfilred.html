@@ -57,13 +57,20 @@ log(
   //위와 아래가 똑같은 이유는 먼저 products가 계속해서 return됨과 curring의 특성상이 중요하다.
   //curry는 함수를 리턴하기 때문에 아래 go함수는 f(a, ..._) 를 리턴하게 되고 여기서 a는 products, filter는 ..._가 되게 된다.
 
+  const total_price = pipe(
+    map(p=>p.price),
+    reduce(add));
+
+  const base_total_price = predi => pipe(
+    filter(predi),
+    total_price
+  );
+
   go(
     products,
-    filter(p=>p.price < 20000),
-    map(p=>p.price),
-    reduce(add),
+    base_total_price(p=>p.price < 20000),
     log
-  )
+  );
 
 
 
