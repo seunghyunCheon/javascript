@@ -28,4 +28,13 @@ log(reduce(add, range(5))); // array vs iterator. array는 사실 필요한 값�
 const iterange = L.range(5);
 log(reduce(add , iterange)); //It had better to use.
 
+function test(name, time, f) { // time is number that function is executed 
+    console.time(name);
+    while(time--)f();
+    console.timeEnd(name);
+}
+
+test('range', 10, () => reduce(add, range(100000)));
+
+
 </script>
