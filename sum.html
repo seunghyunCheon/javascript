@@ -1,0 +1,56 @@
+<head>
+    <meta charset="UTF-8">
+    <script src="./lib/fx.js"></script>
+</head>
+<body>
+
+    <div id="cart">
+
+    </div>
+</body>
+
+<script>
+  const go = (...args) => reduce((a,f)=>f(a), args)
+  const pipe = (f, ...fs) => (...as) => go(f(...as), ...fs);
+
+const products = [
+    { name : '반팔티', price : 15000, qunantity : 1},
+    { name : '긴팔티', price : 20000, qunantity : 2},
+    { name : '핸드폰케이스', price : 15000, qunantity : 3},
+    { name : '후드티', price : 30000, qunantity : 4},
+    { name : '바지', price : 25000, qunantity : 5}
+];
+//총 수량.
+//products를 받아서 go(products)가 된다는 것은 pipe로 받아도된다는 것.
+const add = (a,b) => a+b;
+
+
+
+//이는 특정 도메인에만 의존하는 함수. 즉 도메인의 새로운 정보에는 유연하게 대처하지 못함.
+const total_price = pipe(
+    map(p => p.qunantity * p.price),
+    reduce(add)
+);
+//추상화를 높임.
+const sum = curry((f, iter) => go(
+    iter,
+    map(f),
+    reduce(add)));
+
+const total_quantity = sum(p=>p.qunantity);
+log(total_quantity(products));
+
+//추상화레벨을 높인 sum
+
+log(total_price(products));
+
+log(sum(u => u.age, [
+    {age : 30},
+    {age : 20},
+    {age : 10},
+]))
+
+
+</script>
+
+</body>
