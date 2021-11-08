@@ -14,11 +14,11 @@
   const pipe = (f, ...fs) => (...as) => go(f(...as), ...fs);
 
 const products = [
-    { name : '반팔티', price : 15000, qunantity : 1},
-    { name : '긴팔티', price : 20000, qunantity : 2},
-    { name : '핸드폰케이스', price : 15000, qunantity : 3},
-    { name : '후드티', price : 30000, qunantity : 4},
-    { name : '바지', price : 25000, qunantity : 5}
+    { name : '반팔티', price : 15000, qunantity : 1, isSelected : true},
+    { name : '긴팔티', price : 20000, qunantity : 2, isSelected : false},
+    { name : '핸드폰케이스', price : 15000, qunantity : 3, isSelected : false},
+    { name : '후드티', price : 30000, qunantity : 4, isSelected : true},
+    { name : '바지', price : 25000, qunantity : 5, isSelected : false}
 ];
 //총 수량.
 //products를 받아서 go(products)가 된다는 것은 pipe로 받아도된다는 것.
@@ -48,8 +48,34 @@ log(sum(u => u.age, [
     {age : 30},
     {age : 20},
     {age : 10},
-]))
-
+]));
+//리터럴 문자를 써줘야함.
+document.querySelector('#cart').innerHTML = `
+  <table>
+    <tr>
+      <th></th>
+      <th>상품 이름</th>
+      <th>가격</th>
+      <th>수량</th>
+      <th>총 가격</th>
+    </tr>
+      ${go(products, sum(p =>`
+          <tr>
+            <td><input type="checkbox" ${p.isSelected ? "checked" : ""}></td>
+            <td>${p.name}</td>
+            <td>${p.price}</td>
+            <td>${p.qunantity}</td>
+            <td>${p.price * p.qunantity}</td>
+          </tr>
+        `))
+      }
+    <tr>
+      <td colspan="2">합계</td>
+      <td>${total_quantity(filter(p=>p.isSelected ,products))}</td>  
+      <td>${total_price(filter(p=>p.isSelected ,products))}</td>
+    </tr>
+  </table>
+`
 
 </script>
 
