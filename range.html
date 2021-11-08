@@ -36,5 +36,32 @@ function test(name, time, f) { // time is number that function is executed
 
 test('range', 10, () => reduce(add, range(100000)));
 
+//take는 iterable 프로토콜만 따른다면 조합성이 좋다. 
 
+const go = (...args) => reduce((a,f)=>f(a) ,args);
+
+const take = curry((l ,iter) => {
+    let res = [];
+    for(const a of iter){
+        res.push(a);
+        if(res.length == l) return res;
+    }
+    return res;
+});
+
+// array type
+console.time();
+log(go(
+    range(100000),
+    take(3),
+    log));
+console.timeEnd();
+
+// iterator type 
+console.time();
+log(go(
+    L.range(100000),
+    take(3),
+    log));
+console.timeEnd();
 </script>
