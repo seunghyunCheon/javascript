@@ -18,7 +18,33 @@
         Lmap(([k,v])=> `${k}=${v}`),
         join('&') //조합성이 증가함. -> 이터러블이 호환가능 -> 지연성이 높아진다.
     );
-    
+
     log(queryStr({limit : 10, offset : 10, type : 'notice'}))
     log(Object.entries({limit : 10, offset : 10, type : 'notice'}));
+
+    const users = [
+        { age : 32},
+        { age : 31},
+        { age : 37},
+        { age : 28},
+        { age : 25},
+        { age : 32},
+        { age : 31},
+        { age : 37}
+    ]
+    //find는 take를 이용하여 특정값 한값만 추출함.
+    const find = curry((f, iter) => go(
+        iter,
+        Lfilter(f), 
+        take(1),
+        ([a]) => a //array to string.
+    ));
+    log(find(u=>u.age < 30,users));
+    go(
+        users,
+        Lmap(u=> u.age),
+        find(n=> n<30),
+        log);
+
+
 </script>
