@@ -1,0 +1,23 @@
+<script src="lib/fx.js"></script>
+<script>
+  
+
+
+go(
+  range(1000),
+  map(a=>a+10),
+  filter(a=>a%2),
+  log
+);
+
+//L은 제너레이션이기 떄문에 take갯수만큼만 실행된다. 
+go(
+  Lrange(1000),
+  Lmap(a=>a+10),
+  Lfilter(a=>a%2),
+  take(2),
+  log
+);
+
+
+</script>
