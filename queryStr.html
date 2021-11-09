@@ -4,12 +4,21 @@
     // querystr 만들기
     // go나 pipe는 첫번째값이 다음함수의 인자로 쓰이게 된다.
     // curry에서 인자를 제거해도됨은 이 이유때문.
-    const queryStr = pipe(
-        Object.entries,
-        map(([k,v])=> `${k}=${v}`),
-        reduce((a,b) => `${a}&${b}`)
-    );
 
+    //obj[k]는 value.
+    Lentries = function *(obj) {
+        for (const k in obj) yield [k, obj[k]];
+    }
+
+    const join = curry((seq = ',', iter) =>
+        reduce((a,b)=> `${a}${seq}${b}`, iter));
+    
+    const queryStr = pipe(
+        Lentries,
+        Lmap(([k,v])=> `${k}=${v}`),
+        join('&') //조합성이 증가함. -> 이터러블이 호환가능 -> 지연성이 높아진다.
+    );
+    
     log(queryStr({limit : 10, offset : 10, type : 'notice'}))
     log(Object.entries({limit : 10, offset : 10, type : 'notice'}));
 </script>
