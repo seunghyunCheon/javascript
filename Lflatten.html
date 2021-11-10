@@ -1,0 +1,25 @@
+<script src="lib/fx.js"></script>
+
+<!-- L.flatten -->
+<script>
+const isIterable = (iter) => iter && iter[Symbol.iterator];
+
+
+Lflatten = function *(iter) {
+    for(const a of iter) 
+        if(isIterable(a)) for(const b of a) yield b;
+        else yield a;
+};
+
+var it = Lflatten([[1,2],3,4,[5,6],[7,8,9]]);
+log(it.next());
+log(it.next());
+log(it.next());
+log(it.next());
+//infinity를 넣은 이유는 끝까지 가기 위함, 여기서 4를 넣으면 4개만 뽑임. 즉 for문이 4번만 도는 것이고 infinity는 끝까지 다돌고 마지막에 return하는 것.
+const flatten = pipe(Lflatten, take(Infinity)); 
+log(flatten([[1,2],3,4,[5,6],[7,8,9]]));
+log(take(3, Lflatten([[1,2],3,4,[5,6],[7,8,9]])));
+
+
+</script>
