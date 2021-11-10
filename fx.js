@@ -12,25 +12,10 @@ const range = l => {
     return res;
 }
 
-const map = curry((f, iter) => {
-    let res = [];
-    iter = iter[Symbol.iterator]()
-    let cur;
-    while(!(cur = iter.next()).done){
-        const a = cur.value;
-        res.push
-    }
+const map = curry(pipe(Lmap,take(4)));
 
-    return res;
-});
-
-const filter = curry((f, iter) => {
-    let res = []
-    for(const a of iter){
-        if(f(a)) res.push(a) //filter의 핵심.
-    }
-    return res;
-});
+log(map(a=>a+10, Lrange(4)));
+const filter = curry(pipe(Lfilter), take(4));
 
 const reduce = curry((f, acc, iter) => {
     if(!iter) {
@@ -44,6 +29,7 @@ const reduce = curry((f, acc, iter) => {
 });
 
 const go = (...args) => reduce((a,f)=>f(a) ,args);
+const pipe = (f, ...fs) => (...as) => go(f(...as), ...fs);
 
 const take = curry((l ,iter) => {
     let res = [];
@@ -54,12 +40,9 @@ const take = curry((l ,iter) => {
     return res;
 });
 
-// 느긋한 L.
+// 느긋한 L. L함수들은 세로로 진행된다고 보면됨. 
+// breakpoint를 찍어보면 take먼저 실행되고 위로 올라가는 것을 볼 수 있음.
 
-Lrange = function *(l) {
-    let i = -1;
-    while(++i < l) yield i;
-}
 
 Lmap = curry(function *(f,iter) {
     for(const a of iter) yield f(a);
