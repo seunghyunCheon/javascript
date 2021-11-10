@@ -23,3 +23,23 @@ log(take(3, Lflatten([[1,2],3,4,[5,6],[7,8,9]])));
 
 
 </script>
+
+
+
+<!-- flatmap -->
+
+<script>
+  log([[1,2],[3,4], [5,6,7]].flatMap(a=>a.map(a=>a*a)));
+  //flatmap은 map을하고 flatten을 한 것과 같기때문에 시간복잡도 차이면에서 별 차이가 없다.
+
+  LflatMap = curry(pipe(Lmap, Lflatten));
+  const flatMap = curry(pipe(Lmap, flatten));
+  var it = LflatMap(map(a=>a*a), [[1,2], [3,4],[5,6,7]]);
+ 
+
+ log(flatMap(a=>a, [[1,2],[3,4], [5,6,7]]));
+ log(flatMap(range, [1,2,3]));
+</script>
+
+
+
