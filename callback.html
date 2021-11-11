@@ -52,3 +52,24 @@
   log(go1(go1(n2, add5), log)); //promise는 일급값이기때문에 연결이 된다.
 
 </script>
+<!-- promise는 비동기상황에서 함수합성을 안전하도록 하는 것. 모나드라고함.
+      -->
+
+<script>
+  // f . g 함성
+  // f(g(x))
+
+  const g = a => a+1;
+  const f = a => a*a;
+  log(f(g(1)));
+  log(f(g())); // 뭐가 올지 모르는 상황에서 외부값에 노출이되는 무작위의 함수 합성은 그다지 좋지않다.
+
+  [1].map(g).map(f).forEach(r=> log(r)); // [] 컨테이너가 모나드라고함.
+  //위와 같이 promise도 모나드와 비슷한 형태를 지님.
+  Array.of(1) // 1이 담긴 array를 만들어줌.
+  Promise.resolve(1) // 1이 resolve된 promise를 만들어줌.
+  new Promise(resolve =>
+   setTimeout(resolve(1),100)
+   ).then(g).then(f).then(r=>log(r)); //이러한 모나드 구조는 함수합성을 안전한게 하려고. 즉 promise는 함수합성을 안전하게 하기 위해도 쓰인다.
+
+</script>
