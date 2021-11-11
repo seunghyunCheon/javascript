@@ -1,0 +1,26 @@
+<script src="/lib/fx.js"></script>
+<!-- promise -->
+<script>
+  function add10(a, callback){
+    setTimeout(()=> callback(a+10), 100);
+  }
+
+
+  add10(5, res=>{
+    add10(res, res=> {
+      add10(res, res=>{
+        console.log(res);
+      })
+    })
+  })
+  //promise는 return이 있는 것이 큰 특징이다.
+  function add20(a){
+    return new Promise(resolve => setTimeout(()=>resolve(a+20),100));
+  }
+
+  //연속적인 함수를 적용하더라도 눈에 띄게 잘 정리되어있다.
+  add20(5)
+    .then(add20)
+    .then(add20)
+    .then(console.log);
+</script>
