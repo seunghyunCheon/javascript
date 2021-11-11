@@ -1,26 +1,54 @@
-<script src="/lib/fx.js"></script>
+<script src="lib/fx.js"></script>
 <!-- promise -->
 <script>
   function add10(a, callback){
     setTimeout(()=> callback(a+10), 100);
   }
 
-
-  add10(5, res=>{
+  var a = add10(5, res=>{
     add10(res, res=> {
       add10(res, res=>{
         console.log(res);
       })
     })
   })
+
+  log(a);
   //promise는 return이 있는 것이 큰 특징이다.
   function add20(a){
     return new Promise(resolve => setTimeout(()=>resolve(a+20),100));
   }
 
   //연속적인 함수를 적용하더라도 눈에 띄게 잘 정리되어있다.
-  add20(5)
+  var b = add20(5)
     .then(add20)
     .then(add20)
     .then(console.log);
+  
+  log(b);
+
+  //promise가 callback과의 큰 차이는 then을 이용한 결과추출로 콜백지옥을 해결하는 게 큰 차이가 아니라
+  //일급으로 비동기 상황을 다룬다는 점에서 가장 큰 차이를 가진다.
+  //promise는 대기와 성공과 실패를 일급함수로 다룬다.
+
+  //즉 콜백함수는 코드로 다루지만 promise는 값을 return한다는 것.
+
+  //비동기상황이 값으로 다뤄질 수 있다는 점이 일급이라는 점 = 변수에 할당될 수도있고 함수에 전달도 가능.
+</script>
+
+
+<script>
+
+  const delay100 = a => new Promise(resolve =>
+    setTimeout(()=> resolve(a), 100));
+  
+  const add5 = a=> a+5;
+  const go1 = (a,f) => a instanceof Promise ? a.then(add5) : f(a);
+
+  const n1 = 10;
+  log(go1(go1(n1, add5), log)); //undefined. console.log(console.log(5));
+
+  const n2 = delay100(10);
+  log(go1(go1(n2, add5), log)); //promise는 일급값이기때문에 연결이 된다.
+
 </script>
