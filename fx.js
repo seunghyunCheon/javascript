@@ -55,10 +55,13 @@ const take = curry((l ,iter) => {
         let cur;
         while (!(cur = iter.next()).done) {
             const a = cur.value;
-            if(a instanceof Promise) return a.then(a=> { //promise 부분
-                res.push(a);
-                return res.length == l ? res : recur();
-            }); 
+            if(a instanceof Promise) {
+                return a
+                 .then(a=> { //promise 부분
+                    res.push(a);
+                    return res.length == l ? res : recur();
+                 }).catch(e=> e == nop ? recur() : Promise.reject(e)); 
+             }
             res.push(a); //not promise 부분.
             if(res.length == l) return res;
         }
@@ -89,11 +92,20 @@ Lmap = curry(function *(f,iter) {
 //Lmap + flatten
 const flatMap = curry(pipe(Lmap, flatten));
 
+
+//nop이 없다면 filter 밑에 map같은 함수들도 또 실행되야 하기 때문에 비효율.
+const nop = Symbol('nop');
+
 Lfilter = curry(function *(f,iter) {
-    for(const a of iter) if(f(a)) {
-        yield a;}
-         //true일때까지 for문 작동. true일때 yield.
-  });
+    for(const a of iter) {
+        const b = go1(a,f);
+        //아래 부분은 b가 프로미스일때 b의 resolve값이 1 이라면 바로 then을 실행할 수 있는 a를 호출, 0이라면(filter가 되지 않았다면, reject(nop)을 주어 의도적으로 take로 가 recur를 호출하게 함.)
+        if(b instanceof Promise) yield b.then(b => b ? a : Promise.reject(nop)) 
+        else if (b) yield a;
+        }
+    }
+       //true일때까지 for문 작동. true일때 yield.
+  );
 
 
   const map = curry(pipe(Lmap,take(Infinity)));
