@@ -1,0 +1,37 @@
+<script src="lib/fx.js"></script>
+
+<script>
+  /* go(
+    [Promise.resolve(1),Promise.resolve(2),Promise.resolve(3)],
+    Lmap(a=> a+10),
+    take(2),
+    log
+    );
+
+    go(
+    [1, 2, 3],
+    Lmap(a=> Promise.resolve(a+10)),
+    take(2),
+    log
+    );
+  */
+    const add = (a,b) => a+b;
+
+    //reduce에서 nob 구현
+    //promise를 지연성에 넣음으로써 비동기에 의한 많은시간을 전부 실행시키지 않고 구현이 가능해짐.
+    //즉 지연성과 promise의 효율성이 드러나는 코드.
+    go([1,2,3,4,5,6,7,8,9],
+      Lmap(a=> {
+        log(a);
+        return new Promise(resolve => setTimeout(()=> resolve(a*a), 1000));
+      }),
+      Lfilter(a=> {
+        log(a);
+        return new Promise(resolve => setTimeout(resolve(a%2),1000));
+      }),
+      take(5),
+      log
+      );
+  
+
+</script>
