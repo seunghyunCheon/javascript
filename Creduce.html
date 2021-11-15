@@ -7,19 +7,36 @@
 <script>
   const add = (a,b) => a+b;
 
-  const Creduce = curry((f, acc, iter) => iter ? 
-    reduce(f, acc, [...iter]) :  //전개 연산자를 통해서 next를 다 한 상태를 전달해줌.
-    reduce(f, [...acc])); ///...iter혹은 ...acc를 통해 promise로 된 값인(데이터를 불러오는데 시간이 좀 걸리는) 것들을 병렬처리하고 결국 reduce에서 처리는 하나씩 하는 게 맞음 .
-    //즉 데이터를 가져오는건 병렬! 이게 핵심이다.
+  function noop() {} //아무일도 하지 않는 함수.
+  const catchNoop = arr => (arr.forEach(a => a instanceof Promise ? a.catch(noop) : a), arr);
 
-  const delay1000 = a => new Promise(resolve =>{
+  const Ctake = curry((l, iter) => take(l,catchNoop([...iter])));
+
+  const Creduce = curry((f, acc, iter) =>
+  {
+    //논외지만 const값은 값을 변수의 값을 바꿀 수 없고 var는 바꿀 수 있다.
+    var iter2 = catchNoop(iter ? [...iter] : [...acc]); //중요. promise.all도 비동기를 처리하는 함수인데, 강사가 쓴 방법은 generation의 promise값들을 다 next한 걸 펴준거와 같기 때문에 동시 실행이라고 볼 수 있다.
+    //catch가 된 promise를 전달한다면 이는 이후에 catch를 할 수 없다.
+    //즉 임시적으로 catch만 해두는 것이다.
+    return iter ?
+      reduce(f, acc, iter2) : 
+      reduce(f, iter2);
+    // reduce(f, acc, iter2) :  //전개 연산자를 통해서 next를 다 한 상태를 전달해줌.
+    // reduce(f, iter2)); ///...iter혹은 ...acc를 통해 promise로 된 값인(데이터를 불러오는데 시간이 좀 걸리는) 것들을 병렬처리하고 결국 reduce에서 처리는 하나씩 하는 게 맞음 .
+    // //즉 데이터를 가져오는건 병렬! 이게 핵심이다.
+
+  });
+  const delay1000 = a => new Promise((resolve, reject) =>{
     log('hi~');
     setTimeout(()=> resolve(a),1000);
   });
+
+
   console.time('');
-  go([1,2,3,4,5],
+  go([1,2,3,4,5,6,7,8,9],
     Lmap(a=> delay1000(a*a)),
-    Lfilter(a=> a%2),
+    Lfilter(a=> delay1000(a%2)),
+    Lmap(a=> delay1000(a*a)),
     Creduce(add),
     log,
     _ => console.timeEnd('')
