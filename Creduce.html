@@ -1,0 +1,30 @@
+<script src="lib/fx.js"></script>
+
+<!-- 지연된 함수열을 병렬적으로 평가하기. -->
+<!-- 제어를 병렬적으로 처리할 뿐이지 로직자체를 병렬적으로 처리하는 것은 개발자의 몫 -->
+<!-- 여러개의 키들을 한번에 결과를 얻을 때 사용한다. 이는 부하가 커지하는 것을 감소할 만큼의 효율이 있을 때 사용한다. -->
+
+<script>
+  const add = (a,b) => a+b;
+
+  const Creduce = curry((f, acc, iter) => iter ? 
+    reduce(f, acc, [...iter]) :  //전개 연산자를 통해서 next를 다 한 상태를 전달해줌.
+    reduce(f, [...acc])); ///...iter혹은 ...acc를 통해 promise로 된 값인(데이터를 불러오는데 시간이 좀 걸리는) 것들을 병렬처리하고 결국 reduce에서 처리는 하나씩 하는 게 맞음 .
+    //즉 데이터를 가져오는건 병렬! 이게 핵심이다.
+
+  const delay1000 = a => new Promise(resolve =>{
+    log('hi~');
+    setTimeout(()=> resolve(a),1000);
+  });
+  console.time('');
+  go([1,2,3,4,5],
+    Lmap(a=> delay1000(a*a)),
+    Lfilter(a=> a%2),
+    Creduce(add),
+    log,
+    _ => console.timeEnd('')
+  );
+
+
+
+</script>
