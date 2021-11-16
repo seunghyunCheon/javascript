@@ -1,0 +1,19 @@
+<script src="lib/fx.js"></script>
+
+<script>
+  //error 핸들링은 보통 try catch문으로 구현. 하나의 콜스택에서 진행되기에 catch로 다 가게되어있음.
+  function f7(list) {
+    try{
+      return list
+        .map(a=> JSON.parse(a))
+        .filter(a=>a % 2)
+        .slice(0,2);
+    }catch(e){
+      log(e);
+      return [];
+    }
+  }
+  log(f7(['0','1','2', '{'])); 
+
+
+</script>
