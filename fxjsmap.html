@@ -1,0 +1,36 @@
+<script src="lib/fx.js"></script>
+
+<script>
+	async function delayI(a) {
+		return new Promise(resolve => setTimeout(()=>resolve(a), 100));
+	}
+
+	async function f2() {
+		const list = [1,2,3,4];
+		const temp = await list.map(async a=>await delayI(a*a)); //이렇게 해도 안되는 이유는 모든 함수가 promise를 제어하지 않기때문.
+		log(temp);
+		const res = await temp;
+		log(res);
+	}
+
+	async function f3() {
+		const list = [1,2,3,4];
+		const temp = await map(async a=>await delayI(a*a),list);
+		const res = await temp;
+		log(res);
+	}
+
+	f3();
+
+	//async와 await이 필요없는 이유는 애초에 map에서 promise값을 리턴하고 있기 때문.
+	function f4() {
+		return map(a=> delayI(a*a), [1,2,3,4]);
+	} 
+
+	(async () => {
+		log(await f4()); //받을때만 promise를 await으로 바꿔준다면 문제없다.
+	})();
+
+
+f2();
+</script>
